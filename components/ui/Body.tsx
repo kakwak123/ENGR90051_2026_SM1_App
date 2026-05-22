@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { Text, type TextStyle } from 'react-native';
 
 export type BodyTone = 'default' | 'muted' | 'inverse';
 
@@ -6,6 +6,7 @@ export type BodyProps = {
   children: React.ReactNode;
   tone?: BodyTone;
   className?: string;
+  style?: TextStyle | TextStyle[];
 };
 
 const TONE: Record<BodyTone, string> = {
@@ -16,8 +17,10 @@ const TONE: Record<BodyTone, string> = {
 
 const BASE = 'text-base leading-6';
 
-export function Body({ children, tone = 'default', className }: BodyProps) {
+export function Body({ children, tone = 'default', className, style }: BodyProps) {
   return (
-    <Text className={`${BASE} ${TONE[tone]} ${className ?? ''}`.trim()}>{children}</Text>
+    <Text className={`${BASE} ${TONE[tone]} ${className ?? ''}`.trim()} style={style}>
+      {children}
+    </Text>
   );
 }

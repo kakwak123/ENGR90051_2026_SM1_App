@@ -124,6 +124,32 @@ export default function Settings() {
             Restart onboarding
           </Body>
         </Pressable>
+
+        {__DEV__ && (
+          <View style={{ marginTop: F(28) }}>
+            <Eyebrow>{tr('simulate.dev.eyebrow')}</Eyebrow>
+            <Pressable
+              onPress={() => router.push('/simulate-evacuate')}
+              style={{
+                marginTop: F(8),
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: F(14),
+                paddingVertical: F(13),
+                borderWidth: t.ruleAlpha === 1 ? 1.5 : 1,
+                borderColor: t.amber,
+                borderRadius: t.radius,
+              }}
+            >
+              <Body style={{ flex: 1, fontSize: F(13), fontWeight: '700', color: t.ink }}>
+                {tr('simulate.dev.row')}
+              </Body>
+              <Body tone="muted" style={{ fontSize: F(16) }}>
+                ›
+              </Body>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
     </>
   );

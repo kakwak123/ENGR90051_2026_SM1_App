@@ -64,6 +64,10 @@ export default function RootLayout() {
             name="settings"
             options={{ headerShown: true, presentation: 'modal' }}
           />
+          <Stack.Screen
+            name="simulate-evacuate"
+            options={{ presentation: 'fullScreenModal' }}
+          />
           <Stack.Screen name="+not-found" options={{ title: 'Not found' }} />
         </Stack>
         <StatusBar style="auto" />

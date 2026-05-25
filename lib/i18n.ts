@@ -500,6 +500,95 @@ const STRINGS = {
     zh: '← 调整偏好',
     ga: '← Tweak roghanna',
   },
+
+  // simulate (dev-only Act-state demo)
+  'simulate.dev.eyebrow': { en: 'DEV', vi: 'DEV', zh: 'DEV', ga: 'DEV' },
+  'simulate.dev.row': {
+    en: 'Simulate evacuation',
+    vi: 'Mô phỏng sơ tán',
+    zh: '模拟疏散',
+    ga: 'Insamhail aslonnaithe',
+  },
+  'simulate.topbar': {
+    en: '§ ACT · EVACUATE',
+    vi: '§ HÀNH ĐỘNG · SƠ TÁN',
+    zh: '§ 行动 · 疏散',
+    ga: '§ GNÍOMH · ASLONNAIGH',
+  },
+  'simulate.eyebrow': {
+    en: 'EVACUATE NOW',
+    vi: 'SƠ TÁN NGAY',
+    zh: '立即疏散',
+    ga: 'ASLONNAIGH ANOIS',
+  },
+  'simulate.headline.lead': {
+    en: 'Leave in the next',
+    vi: 'Hãy rời đi trong',
+    zh: '请在以下时间内离开',
+    ga: 'Imigh sna',
+  },
+  'simulate.headline.window': {
+    en: '30 minutes.',
+    vi: '30 phút tới.',
+    zh: '30分钟。',
+    ga: '30 nóim atá romhainn.',
+  },
+  'simulate.sub': {
+    en: 'River will reach your street at 15:42.',
+    vi: 'Sông sẽ tới đường phố lúc 15:42.',
+    zh: '河水将于15:42到达你的街道。',
+    ga: 'Sroichfidh an abhainn do shráid ag 15:42.',
+  },
+  'simulate.countdown.unit': {
+    en: 'min remaining',
+    vi: 'phút còn lại',
+    zh: '分钟剩余',
+    ga: 'nóim fágtha',
+  },
+  'simulate.buddy.headline': {
+    en: 'Maya is at your door.',
+    vi: 'Maya đang ở cửa nhà bạn.',
+    zh: 'Maya 在你门口。',
+    ga: 'Tá Maya ag do dhoras.',
+  },
+  'simulate.buddy.sub': {
+    en: 'Go with her. Take the orange bag.',
+    vi: 'Đi cùng cô ấy. Mang túi cam.',
+    zh: '跟她走。带上橙色包。',
+    ga: 'Imigh léi. Tabhair leat an mála flannbhuí.',
+  },
+  'simulate.cta.leaving': {
+    en: 'I am leaving now ✓',
+    vi: 'Tôi đi ngay ✓',
+    zh: '我现在就走 ✓',
+    ga: 'Táim ag imeacht anois ✓',
+  },
+  'simulate.cta.cannot.title': {
+    en: 'I cannot leave',
+    vi: 'Tôi không thể rời đi',
+    zh: '我无法离开',
+    ga: 'Ní féidir liom imeacht',
+  },
+  'simulate.cta.cannot.sub': {
+    en: 'Send help to my address',
+    vi: 'Gửi trợ giúp đến địa chỉ của tôi',
+    zh: '请派人到我的地址',
+    ga: 'Seol cabhair chuig mo sheoladh',
+  },
+  'simulate.confirm.title': {
+    en: 'Send help to your address?',
+    vi: 'Gửi trợ giúp đến địa chỉ của bạn?',
+    zh: '派人到你的地址?',
+    ga: 'Seol cabhair chuig do sheoladh?',
+  },
+  'simulate.confirm.msg': {
+    en: 'VICSES and your buddy will be told you cannot evacuate on your own.',
+    vi: 'VICSES và bạn đồng hành sẽ được thông báo bạn không thể tự sơ tán.',
+    zh: 'VICSES 和你的伙伴将被告知你无法自行疏散。',
+    ga: 'Inseofar do VICSES agus do do chara nach féidir leat aslonnú leat féin.',
+  },
+  'simulate.confirm.cancel': { en: 'Cancel', vi: 'Huỷ', zh: '取消', ga: 'Cealaigh' },
+  'simulate.confirm.send': { en: 'Send', vi: 'Gửi', zh: '发送', ga: 'Seol' },
 } satisfies Record<string, Dict>;
 
 export type StringKey = keyof typeof STRINGS;

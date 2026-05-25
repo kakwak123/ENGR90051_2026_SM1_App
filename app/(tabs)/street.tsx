@@ -1,4 +1,5 @@
-import { ScrollView, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, ScrollView, View } from 'react-native';
 
 import { Body } from '@/components/ui/Body';
 import { Card } from '@/components/ui/Card';
@@ -8,8 +9,9 @@ import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/profile';
 
 type HomeStatus = 'ready' | 'prep' | 'help' | 'none';
+type Home = { n: string; o: string; s: HomeStatus; m: string; you?: boolean };
 
-const HOMES: { n: string; o: string; s: HomeStatus; m: string; you?: boolean }[] = [
+const HOMES: Home[] = [
   { n: '2', o: 'Wong', s: 'ready', m: 'At home' },
   { n: '4', o: 'Kovač', s: 'ready', m: 'At home' },
   { n: '6', o: 'Pereira', s: 'ready', m: 'At home' },
@@ -28,6 +30,7 @@ export default function StreetScreen() {
   const t = useTheme();
   const tr = useT();
   const F = (n: number) => Math.round(n * t.scale);
+  const [selected, setSelected] = useState<Home | null>(null);
 
   const colorFor = (s: HomeStatus) =>
     s === 'ready' ? t.green : s === 'prep' ? t.amber : s === 'help' ? t.red : '#C8C2B1';
@@ -162,9 +165,10 @@ export default function StreetScreen() {
       </View>
       <Card style={{ padding: 0, overflow: 'hidden' }}>
         {HOMES.map((h, i) => (
-          <View
+          <Pressable
             key={i}
-            style={{
+            onPress={() => setSelected(h)}
+            style={({ pressed }) => ({
               flexDirection: 'row',
               alignItems: 'center',
               gap: F(10),
@@ -172,12 +176,16 @@ export default function StreetScreen() {
               paddingVertical: F(11),
               borderBottomWidth: i < HOMES.length - 1 ? (t.ruleAlpha === 1 ? 1 : 0.5) : 0,
               borderBottomColor: t.ruleAlpha === 1 ? t.ink : t.rule,
-              backgroundColor: h.you
+              backgroundColor: pressed
                 ? t.ruleAlpha === 1
                   ? t.amberSoft
-                  : 'rgba(232,128,58,0.06)'
-                : 'transparent',
-            }}
+                  : 'rgba(0,0,0,0.04)'
+                : h.you
+                  ? t.ruleAlpha === 1
+                    ? t.amberSoft
+                    : 'rgba(232,128,58,0.06)'
+                  : 'transparent',
+            })}
           >
             <Body
               className="font-mono"
@@ -225,9 +233,116 @@ export default function StreetScreen() {
             >
               {labelFor(h.s)}
             </Body>
-          </View>
+          </Pressable>
         ))}
       </Card>
+
+      <Modal
+        visible={selected !== null}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setSelected(null)}
+      >
+        <Pressable
+          onPress={() => setSelected(null)}
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Pressable
+            onPress={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: t.bg,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              paddingHorizontal: F(18),
+              paddingTop: F(18),
+              paddingBottom: F(28),
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: F(12) }}>
+              <View
+                style={{
+                  width: F(14),
+                  height: F(48),
+                  backgroundColor: selected ? colorFor(selected.s) : 'transparent',
+                  borderRadius: 3,
+                }}
+              />
+              <View style={{ flex: 1 }}>
+                <Eyebrow>#{selected?.n} · Edgewater Bvd</Eyebrow>
+                <SerifTitle size="lg">{selected?.o ?? ''}</SerifTitle>
+                <Body tone="muted" style={{ fontSize: F(12), marginTop: 2 }}>
+                  {selected?.m}
+                </Body>
+              </View>
+              <View
+                style={{
+                  backgroundColor: selected ? colorFor(selected.s) : 'transparent',
+                  paddingHorizontal: 8,
+                  paddingVertical: 3,
+                  borderRadius: 6,
+                }}
+              >
+                <Body
+                  style={{
+                    fontSize: 10,
+                    fontWeight: '800',
+                    color: '#fff',
+                    letterSpacing: 0.4,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {selected ? labelFor(selected.s) : ''}
+                </Body>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'row', gap: F(10), marginTop: F(18) }}>
+              <Pressable
+                onPress={() => setSelected(null)}
+                style={({ pressed }) => ({
+                  flex: 1,
+                  paddingVertical: F(13),
+                  backgroundColor: t.ink,
+                  borderRadius: t.radius,
+                  alignItems: 'center',
+                  opacity: pressed ? 0.85 : 1,
+                })}
+              >
+                <Body style={{ color: '#fff', fontSize: F(14), fontWeight: '800' }}>
+                  {tr('street.sheet.message')}
+                </Body>
+              </Pressable>
+              <Pressable
+                onPress={() => setSelected(null)}
+                style={({ pressed }) => ({
+                  flex: 1,
+                  paddingVertical: F(13),
+                  borderWidth: 1.5,
+                  borderColor: t.ink,
+                  borderRadius: t.radius,
+                  alignItems: 'center',
+                  opacity: pressed ? 0.6 : 1,
+                })}
+              >
+                <Body style={{ color: t.ink, fontSize: F(14), fontWeight: '800' }}>
+                  {tr('street.sheet.call')}
+                </Body>
+              </Pressable>
+            </View>
+
+            <Body
+              tone="muted"
+              style={{ fontSize: F(11), marginTop: F(14), lineHeight: F(11) * 1.5 }}
+            >
+              {tr('street.sheet.note')}
+            </Body>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </ScrollView>
   );
 }

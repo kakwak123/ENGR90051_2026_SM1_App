@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
 
 import { Body } from '@/components/ui/Body';
 import { Card } from '@/components/ui/Card';
@@ -13,10 +13,23 @@ export default function CallScreen() {
   const F = (n: number) => Math.round(n * t.scale);
 
   const contacts = [
-    { n: 'Maya L.', r: 'Neighbour · #12 Edgewater Bvd', d: '3 min walk' },
-    { n: 'Sarah Chen', r: 'Daughter · Geelong', d: 'Phone' },
-    { n: 'Dr. Patel', r: 'GP · Footscray', d: 'Phone' },
+    {
+      n: 'Maya L.',
+      r: 'Neighbour · #12 Edgewater Bvd',
+      d: '3 min walk',
+      tel: '+61400111222',
+    },
+    { n: 'Sarah Chen', r: 'Daughter · Geelong', d: 'Phone', tel: '+61400333444' },
+    { n: 'Dr. Patel', r: 'GP · Footscray', d: 'Phone', tel: '+61395550100' },
   ];
+
+  const dial = (number: string, label: string) => {
+    const href = `tel:${number}`;
+    Linking.canOpenURL(href).then((supported) => {
+      if (supported) Linking.openURL(href);
+      else Alert.alert(label, `Would dial ${number}`);
+    });
+  };
 
   const initials = (name: string) =>
     name
@@ -67,7 +80,10 @@ export default function CallScreen() {
                 </Body>
               </View>
               <Pressable
-                style={{
+                onPress={() => dial(c.tel, c.n)}
+                accessibilityRole="button"
+                accessibilityLabel={`Call ${c.n}`}
+                style={({ pressed }) => ({
                   width: F(38),
                   height: F(38),
                   borderRadius: F(19),
@@ -76,7 +92,8 @@ export default function CallScreen() {
                   justifyContent: 'center',
                   borderWidth: t.ruleAlpha === 1 ? 2 : 0,
                   borderColor: t.ink,
-                }}
+                  opacity: pressed ? 0.8 : 1,
+                })}
               >
                 <Body style={{ fontSize: F(16), color: '#fff' }}>📞</Body>
               </Pressable>
@@ -115,7 +132,19 @@ export default function CallScreen() {
               </Body>
             </View>
             <Pressable
-              style={{
+              onPress={() =>
+                Alert.alert('Call 000?', 'Police, fire or ambulance.', [
+                  { text: tr('simulate.confirm.cancel'), style: 'cancel' },
+                  {
+                    text: 'Call',
+                    style: 'destructive',
+                    onPress: () => dial('000', '000'),
+                  },
+                ])
+              }
+              accessibilityRole="button"
+              accessibilityLabel="Call emergency 000"
+              style={({ pressed }) => ({
                 width: F(38),
                 height: F(38),
                 borderRadius: F(19),
@@ -124,7 +153,8 @@ export default function CallScreen() {
                 justifyContent: 'center',
                 borderWidth: t.ruleAlpha === 1 ? 2 : 0,
                 borderColor: t.ink,
-              }}
+                opacity: pressed ? 0.8 : 1,
+              })}
             >
               <Body style={{ fontSize: F(16), color: '#fff' }}>📞</Body>
             </Pressable>

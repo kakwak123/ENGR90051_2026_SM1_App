@@ -40,6 +40,18 @@ const STRINGS = {
     zh: '一切平静。',
     ga: 'Gach rud socair.',
   },
+  'home.headline.watch': {
+    en: 'Pack a bag.',
+    vi: 'Chuẩn bị túi đồ.',
+    zh: '准备好行囊。',
+    ga: 'Pacáil mála.',
+  },
+  'home.headline.act': {
+    en: 'Leave in 30 min.',
+    vi: 'Rời đi trong 30 phút.',
+    zh: '30分钟内离开。',
+    ga: 'Imigh i gceann 30 nóim.',
+  },
   'home.river.title': {
     en: 'River level',
     vi: 'Mực nước sông',
@@ -57,6 +69,18 @@ const STRINGS = {
     vi: 'YÊN TĨNH',
     zh: '安静',
     ga: 'CIÚIN',
+  },
+  'home.street.tag.watch': {
+    en: 'PREPARING',
+    vi: 'ĐANG CHUẨN BỊ',
+    zh: '准备中',
+    ga: 'AG ULLMHÚ',
+  },
+  'home.street.tag.act': {
+    en: 'ACT NOW',
+    vi: 'HÀNH ĐỘNG',
+    zh: '立即行动',
+    ga: 'GNÍOMH ANOIS',
   },
   'home.street.monitored': {
     en: '12 homes monitored',
@@ -78,12 +102,54 @@ const STRINGS = {
     zh: '● 已装好 · 4月18日',
     ga: '● Pacáilte · 18 Aib',
   },
+  'home.bag.state.watch': {
+    en: 'Pack now',
+    vi: 'Đóng gói ngay',
+    zh: '现在装',
+    ga: 'Pacáil anois',
+  },
+  'home.bag.sub.watch': {
+    en: '● Half packed',
+    vi: '● Đóng gói một nửa',
+    zh: '● 装好一半',
+    ga: '● Leath pacáilte',
+  },
+  'home.bag.state.act': {
+    en: 'Take it',
+    vi: 'Mang đi',
+    zh: '带上',
+    ga: 'Tabhair leat',
+  },
+  'home.bag.sub.act': {
+    en: '● By the door',
+    vi: '● Cạnh cửa',
+    zh: '● 在门边',
+    ga: '● Cois an dorais',
+  },
   'home.buddy': { en: 'BUDDY', vi: 'BẠN', zh: '伙伴', ga: 'CARA' },
   'home.buddy.sub': {
     en: '3 min walk',
     vi: '3 phút đi bộ',
     zh: '步行3分钟',
     ga: '3 nóim siúil',
+  },
+  'home.buddy.sub.watch': {
+    en: 'Ready to leave',
+    vi: 'Sẵn sàng đi',
+    zh: '准备离开',
+    ga: 'Réidh le imeacht',
+  },
+  'home.buddy.sub.act': {
+    en: 'At your door',
+    vi: 'Ở cửa của bạn',
+    zh: '在你门口',
+    ga: 'Ag do dhoras',
+  },
+  'home.cta.act': {
+    en: 'Open evacuation guide →',
+    vi: 'Mở hướng dẫn sơ tán →',
+    zh: '打开疏散指南 →',
+    ga: 'Oscail treoir aslonnaithe →',
   },
   'home.listen': {
     en: 'Listen to summary',
@@ -589,6 +655,52 @@ const STRINGS = {
   },
   'simulate.confirm.cancel': { en: 'Cancel', vi: 'Huỷ', zh: '取消', ga: 'Cealaigh' },
   'simulate.confirm.send': { en: 'Send', vi: 'Gửi', zh: '发送', ga: 'Seol' },
+
+  // demo cycler (dev-only)
+  'demo.cycler.label': { en: 'DEMO', vi: 'DEMO', zh: '演示', ga: 'TAISPEÁNTAS' },
+  'demo.cycler.calm': { en: 'CALM', vi: 'YÊN', zh: '平静', ga: 'SOCAIR' },
+  'demo.cycler.watch': { en: 'WATCH', vi: 'CẢNH GIÁC', zh: '警戒', ga: 'AIRE' },
+  'demo.cycler.act': { en: 'ACT', vi: 'HÀNH ĐỘNG', zh: '行动', ga: 'GNÍOMH' },
+
+  // street row sheet
+  'street.sheet.status': { en: 'Status', vi: 'Trạng thái', zh: '状态', ga: 'Stádas' },
+  'street.sheet.message': {
+    en: 'Send a message',
+    vi: 'Gửi tin nhắn',
+    zh: '发送消息',
+    ga: 'Seol teachtaireacht',
+  },
+  'street.sheet.call': {
+    en: 'Call neighbour',
+    vi: 'Gọi hàng xóm',
+    zh: '呼叫邻居',
+    ga: 'Glaoigh',
+  },
+  'street.sheet.close': { en: 'Close', vi: 'Đóng', zh: '关闭', ga: 'Dún' },
+  'street.sheet.note': {
+    en: 'In a real flood, this opens a quick message picker.',
+    vi: 'Trong lũ thật, sẽ mở trình chọn tin nhắn nhanh.',
+    zh: '在真正的洪水中,这会打开快速消息选择器。',
+    ga: 'I dtuile dáiríre, osclaítear roghnóir teachtaireachta.',
+  },
+
+  // lamp choices
+  'lamp.choice.title': { en: 'Choose', vi: 'Chọn', zh: '选择', ga: 'Roghnaigh' },
+  'lamp.choice.cancel': { en: 'Cancel', vi: 'Huỷ', zh: '取消', ga: 'Cealaigh' },
+  'lamp.test.flashing': {
+    en: 'Lamp pulsing now',
+    vi: 'Đèn đang nhấp nháy',
+    zh: '灯在闪烁',
+    ga: 'Tá an lampa ag preabadh',
+  },
+
+  // river refresh
+  'river.refresh.hint': {
+    en: 'Pull to refresh · last 1 min ago',
+    vi: 'Kéo để làm mới · 1 phút trước',
+    zh: '下拉刷新 · 1分钟前',
+    ga: 'Tarraing chun athnuachan · 1 nóim ó shin',
+  },
 } satisfies Record<string, Dict>;
 
 export type StringKey = keyof typeof STRINGS;

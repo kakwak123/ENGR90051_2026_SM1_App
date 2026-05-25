@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { DemoStateProvider } from '@/lib/demo';
 import { ProfileProvider, useProfile } from '@/lib/profile';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -56,21 +57,23 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ProfileProvider>
-        <RouteGate />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(onboarding)" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen
-            name="settings"
-            options={{ headerShown: true, presentation: 'modal' }}
-          />
-          <Stack.Screen
-            name="simulate-evacuate"
-            options={{ presentation: 'fullScreenModal' }}
-          />
-          <Stack.Screen name="+not-found" options={{ title: 'Not found' }} />
-        </Stack>
-        <StatusBar style="auto" />
+        <DemoStateProvider>
+          <RouteGate />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen
+              name="settings"
+              options={{ headerShown: true, presentation: 'modal' }}
+            />
+            <Stack.Screen
+              name="simulate-evacuate"
+              options={{ presentation: 'fullScreenModal' }}
+            />
+            <Stack.Screen name="+not-found" options={{ title: 'Not found' }} />
+          </Stack>
+          <StatusBar style="auto" />
+        </DemoStateProvider>
       </ProfileProvider>
     </GestureHandlerRootView>
   );

@@ -1,23 +1,85 @@
-import { ScrollView, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { Body } from '@/components/ui/Body';
 import { Card } from '@/components/ui/Card';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { SerifTitle } from '@/components/ui/SerifTitle';
+import { toneFor, useDemoState } from '@/lib/demo';
 import { useT } from '@/lib/i18n';
 import { useTheme } from '@/lib/profile';
+
+/**
+ * Pretend "live" river readings keyed by demo state. The refresh handler
+ * picks a small perturbation around the baseline so the gauge nudges
+ * on every pull.
+ */
+const BASE: Record<
+  'calm' | 'watch' | 'act',
+  { lvl: number; now: number; future: number }
+> = {
+  calm: { lvl: 22, now: 1.4, future: 1.4 },
+  watch: { lvl: 55, now: 3.1, future: 3.5 },
+  act: { lvl: 82, now: 3.7, future: 4.1 },
+};
 
 export default function RiverScreen() {
   const t = useTheme();
   const tr = useT();
+  const { state } = useDemoState();
   const F = (n: number) => Math.round(n * t.scale);
-  const lvl = 22; // calm
+  const tone = toneFor(state);
+
+  const baseline = BASE[state];
+  const [now, setNow] = useState(baseline.now);
+  const [future, setFuture] = useState(baseline.future);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fill = useSharedValue(baseline.lvl);
+  useEffect(() => {
+    fill.value = withTiming(baseline.lvl, { duration: 700 });
+    setNow(baseline.now);
+    setFuture(baseline.future);
+  }, [baseline.lvl, baseline.now, baseline.future, fill]);
+
+  const fillStyle = useAnimatedStyle(() => ({ height: `${fill.value}%` }));
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      const jitter = (cap: number) => (Math.random() - 0.5) * cap;
+      const newLvl = Math.max(5, Math.min(95, baseline.lvl + jitter(20)));
+      const newNow = Math.max(0, baseline.now + jitter(0.4));
+      const newFuture = Math.max(0, baseline.future + jitter(0.5));
+      fill.value = withTiming(newLvl, { duration: 700 });
+      setNow(Number(newNow.toFixed(1)));
+      setFuture(Number(newFuture.toFixed(1)));
+      setRefreshing(false);
+    }, 700);
+  };
+
+  const verdictKey: 'river.verdict.calm' = 'river.verdict.calm';
+  const noteKey: 'river.note.calm' = 'river.note.calm';
+  const verdictColor = state === 'act' ? t.red : state === 'watch' ? t.amber : t.green;
+  const futureColor = state === 'act' ? t.red : state === 'watch' ? t.amber : t.green;
 
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: t.bg }}
       contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={t.hydro}
+        />
+      }
     >
       <Eyebrow>{tr('river.title')} · Avondale Heights</Eyebrow>
       <View style={{ marginTop: 6 }}>
@@ -36,15 +98,17 @@ export default function RiverScreen() {
           overflow: 'hidden',
         }}
       >
-        <View
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: `${lvl}%`,
-            backgroundColor: t.hydro,
-          }}
+        <Animated.View
+          style={[
+            {
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: t.hydro,
+            },
+            fillStyle,
+          ]}
         />
         {/* Street + Door markers */}
         <View
@@ -110,14 +174,14 @@ export default function RiverScreen() {
         style={{
           marginTop: F(12),
           padding: F(14),
-          backgroundColor: t.greenSoft,
+          backgroundColor: t[`${tone}Soft` as 'greenSoft'],
           borderWidth: t.ruleAlpha === 1 ? 2 : 1.5,
-          borderColor: t.green,
+          borderColor: verdictColor,
           borderRadius: t.radius,
         }}
       >
-        <SerifTitle size="lg" color={t.greenInk}>
-          {tr('river.verdict.calm')}
+        <SerifTitle size="lg" color={t[`${tone}Ink` as 'greenInk']}>
+          {tr(verdictKey)}
         </SerifTitle>
       </View>
 
@@ -142,7 +206,7 @@ export default function RiverScreen() {
             <Body
               style={{ fontSize: F(24), fontWeight: '800', color: t.ink, marginTop: 2 }}
             >
-              1.4
+              {now.toFixed(1)}
               <Body tone="muted" style={{ fontSize: F(13) }}>
                 {' '}
                 m
@@ -152,9 +216,14 @@ export default function RiverScreen() {
           <View style={{ flex: 1, padding: F(14) }}>
             <Eyebrow>{tr('river.future')}</Eyebrow>
             <Body
-              style={{ fontSize: F(24), fontWeight: '800', color: t.green, marginTop: 2 }}
+              style={{
+                fontSize: F(24),
+                fontWeight: '800',
+                color: futureColor,
+                marginTop: 2,
+              }}
             >
-              1.4
+              {future.toFixed(1)}
               <Body tone="muted" style={{ fontSize: F(13) }}>
                 {' '}
                 m
@@ -164,10 +233,10 @@ export default function RiverScreen() {
         </View>
         <View style={{ padding: F(12), backgroundColor: t.bg }}>
           <Body style={{ fontSize: F(13), fontWeight: '700', color: t.ink2 }}>
-            {tr('river.note.calm')}
+            {tr(noteKey)}
           </Body>
           <Body tone="muted" style={{ fontSize: F(11), marginTop: 1 }}>
-            {tr('river.ago')}
+            {tr('river.refresh.hint')}
           </Body>
         </View>
       </Card>
